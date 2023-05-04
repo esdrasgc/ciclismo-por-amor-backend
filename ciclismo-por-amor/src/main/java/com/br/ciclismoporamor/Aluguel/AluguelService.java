@@ -1,6 +1,7 @@
 package com.br.ciclismoporamor.Aluguel;
 
-import com.br.ciclismoporamor.Aluguel.dto.BikeReturnDTO;
+import com.br.ciclismoporamor.Aluguel.dto.InfoAluguelDTO;
+import com.br.ciclismoporamor.Aluguel.dto.bike.BikeReturnDTO;
 import com.br.ciclismoporamor.Aluguel.dto.SaveAluguelDTO;
 import com.br.ciclismoporamor.Aluguel.dto.DevolveBikeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class AluguelService {
         return aluguelRepository.findByIdBike(id_bike, pageable);
     }
 
-    public Aluguel saveAluguel(SaveAluguelDTO saveAluguelDTO){
+    public InfoAluguelDTO saveAluguel(SaveAluguelDTO saveAluguelDTO){
        RestTemplate restTemplate = new RestTemplate();
        ResponseEntity<BikeReturnDTO> response =
                restTemplate.getForEntity("http://localhost:8000/bike/", BikeReturnDTO.class);
@@ -42,14 +43,18 @@ public class AluguelService {
                 aluguel.setOrigem(saveAluguelDTO.getOrigem());
                 aluguel.setStatus(AluguelStatus.CONFIRMADO);
                 aluguel.setCoordOrigem(saveAluguelDTO.getCoordInicial());
-                aluguel.setIdBike(bike.getBikeId());
-                aluguel.setPrecoPorHora(bike.getPreco());
+                aluguel.setIdBike(bike.getIdentifier());
+                aluguel.setPrecoPorHora(bike.getPricePHour());
+                aluguel.setModeloBike(bike.getModel());
                 aluguelRepository.save(aluguel);
-                return aluguel;
+
+                return InfoAluguelDTO.covert(aluguel);
            }
        }
 //       throw new RuntimeException("Sem bicicletas disponíveis :(");
-
+        Aluguel aluguel = new Aluguel();
+        aluguel.setStatus(AluguelStatus.ERRO);
+        aluguelRepository.save(aluguel);
         return null;
     }
 

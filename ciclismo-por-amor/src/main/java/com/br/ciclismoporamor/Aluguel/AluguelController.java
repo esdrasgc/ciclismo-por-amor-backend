@@ -1,5 +1,6 @@
 package com.br.ciclismoporamor.Aluguel;
 
+import com.br.ciclismoporamor.Aluguel.dto.InfoAluguelDTO;
 import com.br.ciclismoporamor.Aluguel.dto.SaveAluguelDTO;
 import com.br.ciclismoporamor.Aluguel.dto.DevolveBikeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class AluguelController {
     }
 
     @PostMapping
-    public Aluguel saveAluguel(@RequestBody SaveAluguelDTO aluguel){
+    public InfoAluguelDTO saveAluguel(@RequestBody SaveAluguelDTO aluguel){
         return aluguelService.saveAluguel(aluguel);
     }
 
