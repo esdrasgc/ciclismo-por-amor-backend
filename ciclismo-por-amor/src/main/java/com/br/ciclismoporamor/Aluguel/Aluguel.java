@@ -40,7 +40,7 @@ public class Aluguel {
 
     private double[] coordDestino;
 
-    private Duration tempoDeViagem;
+    private double tempoDeViagem;
 
     private double distancia;
 
