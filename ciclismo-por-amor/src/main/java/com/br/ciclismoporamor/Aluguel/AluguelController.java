@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/aluguel")
 public class AluguelController {
@@ -15,8 +17,8 @@ public class AluguelController {
     private AluguelService aluguelService;
 
     @GetMapping
-    public Page<Aluguel> listAlugueis(@RequestParam(required = false) String id_bike, Pageable pageable) {
-        return aluguelService.listarAlugueis(id_bike, pageable);
+    public List<InfoAluguelDTO> listAlugueis(@RequestParam(required = false) String id_bike) {
+        return aluguelService.listarAlugueis(id_bike);
     }
 
     @PostMapping
