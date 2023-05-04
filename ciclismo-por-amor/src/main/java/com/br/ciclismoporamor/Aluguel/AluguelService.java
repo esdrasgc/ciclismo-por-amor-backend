@@ -1,19 +1,19 @@
 package com.br.ciclismoporamor.Aluguel;
 
-import com.br.ciclismoporamor.Aluguel.dto.BikeReturnDTO;
+import com.br.ciclismoporamor.Aluguel.dto.InfoAluguelDTO;
+import com.br.ciclismoporamor.Aluguel.dto.bike.BikeReturnDTO;
 import com.br.ciclismoporamor.Aluguel.dto.SaveAluguelDTO;
 import com.br.ciclismoporamor.Aluguel.dto.DevolveBikeDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.web.client.RestTemplate;
@@ -27,36 +27,47 @@ public class AluguelService {
     @Autowired
     private AluguelRepository aluguelRepository;
 
-    public Page<Aluguel> listarAlugueis(String id_bike, Pageable pageable){
-        if (id_bike == null){
-            return aluguelRepository.findAll(pageable);
-        }
+    public List<InfoAluguelDTO> listarAlugueis(String id_bike){
+        List<InfoAluguelDTO> lista_final = new ArrayList<>();
+        List<Aluguel> lista;
 
-        return aluguelRepository.findByIdBike(id_bike, pageable);
+        if (id_bike == null){
+            lista = aluguelRepository.findAll();
+        } else {
+            lista = aluguelRepository.findByIdBike(id_bike); }
+
+        for (Aluguel i : lista){
+            lista_final.add(InfoAluguelDTO.covert(i)); }
+
+        return lista_final;
     }
 
-    public Aluguel saveAluguel(SaveAluguelDTO saveAluguelDTO){
-//       RestTemplate restTemplate = new RestTemplate();
-//       ResponseEntity<BikeReturnDTO> response =
-//               restTemplate.getForEntity("http://localhost:8000/bike/", BikeReturnDTO.class);
-//       if (response.getStatusCode().is2xxSuccessful()) {
-//           BikeReturnDTO bike = response.getBody();
-//           if (bike != null){
+    public InfoAluguelDTO saveAluguel(SaveAluguelDTO saveAluguelDTO){
+       RestTemplate restTemplate = new RestTemplate();
+       ResponseEntity<BikeReturnDTO> response =
+               restTemplate.getForEntity("http://localhost:8000/bike/", BikeReturnDTO.class);
+       if (response.getStatusCode().is2xxSuccessful()) {
+           BikeReturnDTO bike = response.getBody();
+           if (bike != null){
                 Aluguel aluguel = new Aluguel();
                 aluguel.setIdentificador(UUID.randomUUID().toString());
                 aluguel.setDiaHoraInicio(LocalDateTime.now());
                 aluguel.setOrigem(saveAluguelDTO.getOrigem());
                 aluguel.setStatus(AluguelStatus.CONFIRMADO);
                 aluguel.setCoordOrigem(saveAluguelDTO.getCoordInicial());
-                aluguel.setIdBike("bk1");
-                aluguel.setPrecoPorHora(20.00);
+                aluguel.setIdBike(bike.getIdentifier());
+                aluguel.setPrecoPorHora(bike.getPricePHour());
+                aluguel.setModeloBike(bike.getModel());
                 aluguelRepository.save(aluguel);
-                return aluguel;
-//           }
-//       }
-//       throw new RuntimeException("Sem bicicletas disponíveis :(");
 
-//        return null;
+                return InfoAluguelDTO.covert(aluguel);
+           }
+       }
+//       throw new RuntimeException("Sem bicicletas disponíveis :(");
+        Aluguel aluguel = new Aluguel();
+        aluguel.setStatus(AluguelStatus.ERRO);
+        aluguelRepository.save(aluguel);
+        return null;
     }
 
     public Aluguel devolverBike(String identificador, DevolveBikeDTO devolveBikeDTO){
