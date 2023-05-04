@@ -1,6 +1,7 @@
 package com.br.ciclismoporamor.Aluguel;
 
 import com.br.ciclismoporamor.Aluguel.dto.SaveAluguelDTO;
+import com.br.ciclismoporamor.Aluguel.dto.DevolveBikeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
+import java.time.Duration;
+
 
 @Service
 public class AluguelService {
@@ -46,4 +49,20 @@ public class AluguelService {
 //        throw new RuntimeException("Não tem bicicletas disponíveis");
 
     }
+
+    public Aluguel devolverBike(String identificador, DevolveBikeDTO devolveBikeDTO){
+        Aluguel aluguelDB = aluguelRepository.findByIdentificador(identificador);
+
+        aluguelDB.setCoordDestino(devolveBikeDTO.getCoorDestino());
+        aluguelDB.setDestino(devolveBikeDTO.getDestino());
+        aluguelDB.setStatus(AluguelStatus.FINALIZADO);
+        aluguelDB.setTempoDeViagem(Duration.between(aluguelDB.getDiaHoraInicio(), LocalDateTime.now()));
+        aluguelDB.setDistancia(-1);
+        aluguelDB.setPreco(-1);
+
+        aluguelRepository.save(aluguelDB);
+        return aluguelDB;
+    }
+
+
 }
