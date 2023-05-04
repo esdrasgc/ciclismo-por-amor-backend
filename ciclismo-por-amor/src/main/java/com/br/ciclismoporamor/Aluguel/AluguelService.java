@@ -39,5 +39,11 @@ public class AluguelService {
         return aluguelDB;
     }
 
+    public void deleteAluguel(String identificador){
+        Aluguel aluguelDB = aluguelRepository.findByIdentificador(identificador);
+        if (aluguelDB != null){
+            aluguelRepository.delete(aluguelDB);
+        }
+    }
 
 }

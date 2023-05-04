@@ -22,6 +22,11 @@ public class AluguelController {
     public Aluguel editAluguel(@PathVariable String identificador, @RequestBody DevolveBikeDTO devolveBikeDTO){
         return aluguelService.devolverBike(identificador, devolveBikeDTO);
     }
-    
+
+
+    @DeleteMapping("/{identificador}")
+    public void deletAluguel(@PathVariable String identificador){
+        aluguelService.deleteAluguel(identificador);
+    }
     
 }
