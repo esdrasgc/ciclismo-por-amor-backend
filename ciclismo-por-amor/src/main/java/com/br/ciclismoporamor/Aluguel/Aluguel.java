@@ -32,13 +32,13 @@ public class Aluguel {
 
     @NonNull
     @Column(nullable = false)
-    private String Origem;
+    private String origem;
 
-    private double[] coorOrigem = new double[2];
+    private double[] coorOrigem;
 
-    private String Destino;
+    private String destino;
 
-    private double[] coordDestino = new double[2];
+    private double[] coordDestino;
 
     private Duration tempoDeViagem;
 
