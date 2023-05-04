@@ -34,7 +34,7 @@ public class Aluguel {
     @Column(nullable = false)
     private String origem;
 
-    private double[] coorOrigem;
+    private double[] coordOrigem;
 
     private String destino;
 
