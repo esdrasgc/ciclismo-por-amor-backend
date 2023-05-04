@@ -46,6 +46,8 @@ public class Aluguel {
 
     private double preco;
 
+    private double precoPorHora;
+
     private AluguelStatus status;
 
     private String idBike;

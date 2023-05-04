@@ -1,5 +1,6 @@
 package com.br.ciclismoporamor.Aluguel;
 
+import com.br.ciclismoporamor.Aluguel.dto.BikeReturnDTO;
 import com.br.ciclismoporamor.Aluguel.dto.SaveAluguelDTO;
 import com.br.ciclismoporamor.Aluguel.dto.DevolveBikeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,25 +30,27 @@ public class AluguelService {
     }
 
     public Aluguel saveAluguel(SaveAluguelDTO saveAluguelDTO){
-//        RestTemplate restTemplate = new RestTemplate();
-//        ResponseEntity<String> response =
-//                restTemplate.getForEntity("http://localhost:8080/bike/", String.class);
-//        if (response.getStatusCode().is2xxSuccessful()) {
-//            String id_bike = response.getBody();
-//            if (id_bike != null){
-        Aluguel aluguel = new Aluguel();
-        aluguel.setIdentificador(UUID.randomUUID().toString());
-        aluguel.setDiaHoraInicio(LocalDateTime.now());
-        aluguel.setOrigem(saveAluguelDTO.getOrigem());
-        aluguel.setStatus(AluguelStatus.CONFIRMADO);
-        aluguel.setCoordOrigem(saveAluguelDTO.getCoordInicial());
-//        aluguel.setIdBike(id_bike);
-        aluguelRepository.save(aluguel);
-        return aluguel;
-//            }
-//        }
-//        throw new RuntimeException("Não tem bicicletas disponíveis");
+       RestTemplate restTemplate = new RestTemplate();
+       ResponseEntity<BikeReturnDTO> response =
+               restTemplate.getForEntity("http://localhost:8000/bike/", BikeReturnDTO.class);
+       if (response.getStatusCode().is2xxSuccessful()) {
+           BikeReturnDTO bike = response.getBody();
+           if (bike != null){
+                Aluguel aluguel = new Aluguel();
+                aluguel.setIdentificador(UUID.randomUUID().toString());
+                aluguel.setDiaHoraInicio(LocalDateTime.now());
+                aluguel.setOrigem(saveAluguelDTO.getOrigem());
+                aluguel.setStatus(AluguelStatus.CONFIRMADO);
+                aluguel.setCoordOrigem(saveAluguelDTO.getCoordInicial());
+                aluguel.setIdBike(bike.getBikeId());
+                aluguel.setPrecoPorHora(bike.getPreco());
+                aluguelRepository.save(aluguel);
+                return aluguel;
+           }
+       }
+//       throw new RuntimeException("Sem bicicletas disponíveis :(");
 
+        return null;
     }
 
     public Aluguel devolverBike(String identificador, DevolveBikeDTO devolveBikeDTO){
