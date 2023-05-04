@@ -52,4 +52,6 @@ public class Aluguel {
 
     private String idBike;
 
+    private String modeloBike;
+
 }   
