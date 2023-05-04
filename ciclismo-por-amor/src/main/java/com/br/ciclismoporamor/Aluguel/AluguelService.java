@@ -74,6 +74,7 @@ public class AluguelService {
         aluguelDB.setTempoDeViagem(Duration.between(aluguelDB.getDiaHoraInicio(), LocalDateTime.now()));
         aluguelDB.setDistancia(-1);
         aluguelDB.setPreco(-1);
+        
 
         aluguelRepository.save(aluguelDB);
         return aluguelDB;
