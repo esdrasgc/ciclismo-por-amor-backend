@@ -2,8 +2,6 @@ package com.br.ciclismoporamor.Aluguel;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,7 +34,11 @@ public class Aluguel {
     @Column(nullable = false)
     private String Origem;
 
+    private double[] coorOrigem = new double[2];
+
     private String Destino;
+
+    private double[] coordDestino = new double[2];
 
     private Duration tempoDeViagem;
 
