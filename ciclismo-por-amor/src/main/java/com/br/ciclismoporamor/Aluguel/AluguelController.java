@@ -1,6 +1,7 @@
 package com.br.ciclismoporamor.Aluguel;
 
 import com.br.ciclismoporamor.Aluguel.dto.SaveAluguelDTO;
+import com.br.ciclismoporamor.Aluguel.dto.DevolveBikeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,15 @@ public class AluguelController {
         return aluguelService.saveAluguel(aluguel);
     }
 
-    
+    @PutMapping("/{identificador}")
+    public Aluguel editAluguel(@PathVariable String identificador, @RequestBody DevolveBikeDTO devolveBikeDTO){
+        return aluguelService.devolverBike(identificador, devolveBikeDTO);
+    }
+
+
+    @DeleteMapping("/{identificador}")
+    public void deletAluguel(@PathVariable String identificador){
+        aluguelService.deleteAluguel(identificador);
+    }
     
 }

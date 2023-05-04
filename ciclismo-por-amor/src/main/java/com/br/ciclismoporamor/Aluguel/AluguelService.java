@@ -53,7 +53,7 @@ public class AluguelService {
     public Aluguel devolverBike(String identificador, DevolveBikeDTO devolveBikeDTO){
         Aluguel aluguelDB = aluguelRepository.findByIdentificador(identificador);
 
-        aluguelDB.setCoordDestino(devolveBikeDTO.getCoorDestino());
+        aluguelDB.setCoordDestino(devolveBikeDTO.getCoordDestino());
         aluguelDB.setDestino(devolveBikeDTO.getDestino());
         aluguelDB.setStatus(AluguelStatus.FINALIZADO);
         aluguelDB.setTempoDeViagem(Duration.between(aluguelDB.getDiaHoraInicio(), LocalDateTime.now()));
@@ -64,5 +64,11 @@ public class AluguelService {
         return aluguelDB;
     }
 
+    public void deleteAluguel(String identificador){
+        Aluguel aluguelDB = aluguelRepository.findByIdentificador(identificador);
+        if (aluguelDB != null){
+            aluguelRepository.delete(aluguelDB);
+        }
+    }
 
 }

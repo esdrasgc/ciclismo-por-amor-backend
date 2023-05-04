@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class DevolveBikeDTO {
     private String destino;
-    private double[] coorDestino;
+    private double[] coordDestino;
 }
