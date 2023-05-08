@@ -45,7 +45,7 @@ public class AluguelService {
     public InfoAluguelDTO saveAluguel(SaveAluguelDTO saveAluguelDTO){
        RestTemplate restTemplate = new RestTemplate();
        ResponseEntity<BikeReturnDTO> response =
-               restTemplate.getForEntity("http://localhost:8000/bike/", BikeReturnDTO.class);
+               restTemplate.getForEntity("http://localhost:8080/bike/available", BikeReturnDTO.class);
        if (response.getStatusCode().is2xxSuccessful()) {
            BikeReturnDTO bike = response.getBody();
            if (bike != null){
@@ -55,7 +55,7 @@ public class AluguelService {
                 aluguel.setOrigem(saveAluguelDTO.getOrigem());
                 aluguel.setStatus(AluguelStatus.CONFIRMADO);
                 aluguel.setCoordOrigem(saveAluguelDTO.getCoordInicial());
-                aluguel.setIdBike(bike.getIdentifier());
+                aluguel.setIdBike(bike.getId());
                 aluguel.setPrecoPorHora(bike.getPricePHour());
                 aluguel.setModeloBike(bike.getModel());
                 aluguelRepository.save(aluguel);

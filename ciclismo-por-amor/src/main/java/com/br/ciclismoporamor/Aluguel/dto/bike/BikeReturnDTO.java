@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BikeReturnDTO {
-    private String identifier;
+    private String id;
     private double pricePHour;
     private String model;
     private String type;
