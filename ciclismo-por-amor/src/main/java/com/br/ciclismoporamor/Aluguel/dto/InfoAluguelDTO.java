@@ -12,12 +12,13 @@ public class InfoAluguelDTO {
     private double precoPHora;
     private String origem;
     private LocalDateTime diaHoraInicio;
-
     private String destino;
     private AluguelStatus status;
+    private String identificador;
 
     public static InfoAluguelDTO covert(Aluguel aluguel) {
         InfoAluguelDTO infoAluguelDTO = new InfoAluguelDTO();
+        infoAluguelDTO.setIdentificador(aluguel.getIdentificador());
         infoAluguelDTO.setModelo(aluguel.getModeloBike());
         infoAluguelDTO.setPrecoPHora(aluguel.getPrecoPorHora());
         infoAluguelDTO.setOrigem(aluguel.getOrigem());

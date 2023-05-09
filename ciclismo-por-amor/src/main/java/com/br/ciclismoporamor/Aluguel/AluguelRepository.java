@@ -10,5 +10,6 @@ import java.util.List;
 public interface AluguelRepository extends JpaRepository<Aluguel, Integer>{
     Aluguel findByIdentificador(String identificador);
 
+    List<Aluguel> findByStatus(AluguelStatus status);
    List<Aluguel> findByIdBike(String idBike);
 }

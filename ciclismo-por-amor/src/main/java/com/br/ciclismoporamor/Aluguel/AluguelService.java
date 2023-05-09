@@ -1,6 +1,7 @@
 package com.br.ciclismoporamor.Aluguel;
 
 import com.br.ciclismoporamor.Aluguel.dto.InfoAluguelDTO;
+import com.br.ciclismoporamor.Aluguel.dto.bike.BikeChangeOccupStatusDTO;
 import com.br.ciclismoporamor.Aluguel.dto.bike.BikeReturnDTO;
 import com.br.ciclismoporamor.Aluguel.dto.SaveAluguelDTO;
 import com.br.ciclismoporamor.Aluguel.dto.DevolveBikeDTO;
@@ -27,12 +28,18 @@ public class AluguelService {
     @Autowired
     private AluguelRepository aluguelRepository;
 
-    public List<InfoAluguelDTO> listarAlugueis(String id_bike){
+    public List<InfoAluguelDTO> listarAlugueis(String id_bike, AluguelStatus status){
         List<InfoAluguelDTO> lista_final = new ArrayList<>();
         List<Aluguel> lista;
 
         if (id_bike == null){
-            lista = aluguelRepository.findAll();
+
+            if (status == null){
+                lista = aluguelRepository.findAll();
+            }
+            else{
+                lista = aluguelRepository.findByStatus(status);
+            }
         } else {
             lista = aluguelRepository.findByIdBike(id_bike); }
 
@@ -45,7 +52,7 @@ public class AluguelService {
     public InfoAluguelDTO saveAluguel(SaveAluguelDTO saveAluguelDTO){
        RestTemplate restTemplate = new RestTemplate();
        ResponseEntity<BikeReturnDTO> response =
-               restTemplate.getForEntity("http://localhost:8000/bike/", BikeReturnDTO.class);
+               restTemplate.getForEntity("http://localhost:8000/bike/available", BikeReturnDTO.class);
        if (response.getStatusCode().is2xxSuccessful()) {
            BikeReturnDTO bike = response.getBody();
            if (bike != null){
@@ -55,8 +62,8 @@ public class AluguelService {
                 aluguel.setOrigem(saveAluguelDTO.getOrigem());
                 aluguel.setStatus(AluguelStatus.CONFIRMADO);
                 aluguel.setCoordOrigem(saveAluguelDTO.getCoordInicial());
-                aluguel.setIdBike(bike.getIdentifier());
-                aluguel.setPrecoPorHora(bike.getPricePHour());
+                aluguel.setIdBike(String.valueOf(bike.getId()));
+                aluguel.setPrecoPorHora( bike.getPricePHour().doubleValue() );
                 aluguel.setModeloBike(bike.getModel());
                 aluguelRepository.save(aluguel);
 
@@ -96,6 +103,7 @@ public class AluguelService {
                     aluguelDB.setTempoDeViagem(Duration.between(aluguelDB.getDiaHoraInicio(), LocalDateTime.now()).toMinutes()/60 );
                     aluguelDB.setPreco(aluguelDB.getPrecoPorHora()*aluguelDB.getTempoDeViagem());
                     aluguelRepository.save(aluguelDB);
+                    restTemplate.put("http://localhost:8000/bike/" + String.valueOf(aluguelDB.getIdBike()) + "/occupation", String.class);
                     return aluguelDB;
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
