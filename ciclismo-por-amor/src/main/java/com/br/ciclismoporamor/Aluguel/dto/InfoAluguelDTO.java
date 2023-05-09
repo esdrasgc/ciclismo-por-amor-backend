@@ -15,6 +15,7 @@ public class InfoAluguelDTO {
 
     private String destino;
     private AluguelStatus status;
+    private Integer id;
 
     public static InfoAluguelDTO covert(Aluguel aluguel) {
         InfoAluguelDTO infoAluguelDTO = new InfoAluguelDTO();
@@ -24,6 +25,7 @@ public class InfoAluguelDTO {
         infoAluguelDTO.setDiaHoraInicio(aluguel.getDiaHoraInicio());
         infoAluguelDTO.setDestino(aluguel.getDestino());
         infoAluguelDTO.setStatus(aluguel.getStatus());
+        infoAluguelDTO.setId(aluguel.getId());
         return infoAluguelDTO;
 
     }

@@ -19,6 +19,7 @@ import java.util.UUID;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 import java.time.Duration;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -36,10 +37,7 @@ public class AluguelService {
         } else {
             lista = aluguelRepository.findByIdBike(id_bike); }
 
-        for (Aluguel i : lista){
-            lista_final.add(InfoAluguelDTO.covert(i)); }
-
-        return lista_final;
+        return lista.stream().map(aluguel -> InfoAluguelDTO.covert(aluguel)).collect(Collectors.toList());
     }
 
     public InfoAluguelDTO saveAluguel(SaveAluguelDTO saveAluguelDTO){
