@@ -43,7 +43,7 @@ public class AluguelService {
     public InfoAluguelDTO saveAluguel(SaveAluguelDTO saveAluguelDTO){
        RestTemplate restTemplate = new RestTemplate();
        ResponseEntity<BikeReturnDTO> response =
-               restTemplate.getForEntity("http://localhost:8000/bike/", BikeReturnDTO.class);
+               restTemplate.getForEntity("http://localhost:8081/bike/available", BikeReturnDTO.class);
        if (response.getStatusCode().is2xxSuccessful()) {
            BikeReturnDTO bike = response.getBody();
            if (bike != null){
