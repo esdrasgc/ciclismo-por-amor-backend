@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class BikeReturnDTO {
-    private String identifier;
-    private double pricePHour;
+    private int id;
+    private Float pricePHour;
     private String model;
     private String type;
 }
