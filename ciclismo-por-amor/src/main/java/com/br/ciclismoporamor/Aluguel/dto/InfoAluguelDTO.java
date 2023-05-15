@@ -25,7 +25,6 @@ public class InfoAluguelDTO {
         infoAluguelDTO.setDiaHoraInicio(aluguel.getDiaHoraInicio());
         infoAluguelDTO.setDestino(aluguel.getDestino());
         infoAluguelDTO.setStatus(aluguel.getStatus());
-        infoAluguelDTO.setId(aluguel.getId());
         infoAluguelDTO.setIdentificador(aluguel.getIdentificador());
         return infoAluguelDTO;
 
