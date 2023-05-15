@@ -10,31 +10,43 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping("/aluguel")
+@Api(tags = "Aluguel")
 public class AluguelController {
     @Autowired
     private AluguelService aluguelService;
 
     @GetMapping
+    @ApiOperation("Lista todos os aluguéis")
     public List<InfoAluguelDTO> listAlugueis(@RequestParam(required = false) String id_bike) {
         return aluguelService.listarAlugueis(id_bike);
     }
 
     @PostMapping
+    @ApiOperation("Salva um novo aluguel")
     public InfoAluguelDTO saveAluguel(@RequestBody SaveAluguelDTO aluguel){
         return aluguelService.saveAluguel(aluguel);
     }
 
     @PutMapping("/{identificador}")
-    public Aluguel editAluguel(@PathVariable String identificador, @RequestBody DevolveBikeDTO devolveBikeDTO){
+    @ApiOperation("Devolve uma bicicleta alugada")
+    public Aluguel editAluguel(
+            @ApiParam(value = "Identificador do aluguel", example = "12345") @PathVariable String identificador,
+            @RequestBody DevolveBikeDTO devolveBikeDTO
+    ){
         return aluguelService.devolverBike(identificador, devolveBikeDTO);
     }
 
-
     @DeleteMapping("/{identificador}")
-    public void deletAluguel(@PathVariable String identificador){
+    @ApiOperation("Deleta um aluguel")
+    public void deletAluguel(
+            @ApiParam(value = "Identificador do aluguel", example = "12345") @PathVariable String identificador
+    ){
         aluguelService.deleteAluguel(identificador);
     }
-    
 }
