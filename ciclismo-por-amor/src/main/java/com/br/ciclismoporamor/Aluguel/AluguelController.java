@@ -22,9 +22,8 @@ public class AluguelController {
     private AluguelService aluguelService;
 
     @GetMapping
-    @ApiOperation("Lista todos os aluguéis")
-    public List<InfoAluguelDTO> listAlugueis(@RequestParam(required = false) String id_bike) {
-        return aluguelService.listarAlugueis(id_bike);
+    public List<InfoAluguelDTO> listAlugueis(@RequestParam(required = false) String id_bike, @RequestParam(required = false) AluguelStatus status) {
+        return aluguelService.listarAlugueis(id_bike, status);
     }
 
     @PostMapping
