@@ -64,8 +64,11 @@ public class AluguelService {
 //       throw new RuntimeException("Sem bicicletas disponíveis :(");
         Aluguel aluguel = new Aluguel();
         aluguel.setStatus(AluguelStatus.ERRO);
+        aluguel.setIdentificador(UUID.randomUUID().toString());
+        aluguel.setDiaHoraInicio(LocalDateTime.now());
+        aluguel.setOrigem(saveAluguelDTO.getOrigem());
         aluguelRepository.save(aluguel);
-        return null;
+        return InfoAluguelDTO.covert(aluguel);
     }
 
     public Aluguel devolverBike(String identificador, DevolveBikeDTO devolveBikeDTO){
