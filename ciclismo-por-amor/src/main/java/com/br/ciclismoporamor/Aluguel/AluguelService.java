@@ -50,7 +50,7 @@ public class AluguelService {
     public InfoAluguelDTO saveAluguel(SaveAluguelDTO saveAluguelDTO){
        RestTemplate restTemplate = new RestTemplate();
        ResponseEntity<BikeReturnDTO> response =
-               restTemplate.getForEntity("http://localhost:8000/bike/available", BikeReturnDTO.class);
+               restTemplate.getForEntity("http://localhost:8081/bike/available", BikeReturnDTO.class);
        if (response.getStatusCode().is2xxSuccessful()) {
            BikeReturnDTO bike = response.getBody();
            if (bike != null){
@@ -101,10 +101,10 @@ public class AluguelService {
                     double distancia = Double.valueOf((int) distance.get("value"));
                     aluguelDB.setDistancia(distancia);
                     aluguelDB.setStatus(AluguelStatus.FINALIZADO);
-                    aluguelDB.setTempoDeViagem(Duration.between(aluguelDB.getDiaHoraInicio(), LocalDateTime.now()).toMinutes()/60 );
-                    aluguelDB.setPreco(aluguelDB.getPrecoPorHora()*aluguelDB.getTempoDeViagem());
+                    aluguelDB.setTempoDeViagem(Duration.between(aluguelDB.getDiaHoraInicio(), LocalDateTime.now()).toSeconds() );
+                    aluguelDB.setPreco(aluguelDB.getPrecoPorHora()*aluguelDB.getTempoDeViagem()/3600);
                     aluguelRepository.save(aluguelDB);
-                    restTemplate.put("http://localhost:8000/bike/" + String.valueOf(aluguelDB.getIdBike()) + "/occupation", String.class);
+                    restTemplate.put("http://localhost:8081/bike/" + String.valueOf(aluguelDB.getIdBike()) + "/occupation", String.class);
                     return aluguelDB;
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
